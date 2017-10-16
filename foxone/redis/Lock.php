@@ -8,6 +8,8 @@
 
 namespace foxone\redis;
 
+use foxone\redis\Redis;
+
 class Lock {
 
     const LOCK_PREFIX = 'lock:';
@@ -15,9 +17,6 @@ class Lock {
     private $_redis;
 
     public function __construct() {
-        if (!extension_loaded('redis')) {
-            throw new \RuntimeException('The redis extension must be loaded.');
-        }
         $this->_redis = new Redis();
     }
 
@@ -47,8 +46,4 @@ class Lock {
         return false;
     }
 
-    public function __destruct() {
-        $this->_redis->close();
-        $this->_redis && $this->_redis = NULL;
-    }
 }
