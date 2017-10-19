@@ -14,10 +14,9 @@ class Redis {
     private $_redis;
     private $options = [
         'expire' => 0,
-        'prefix' => 'onefox_',
         'server' => [
             'host' => '127.0.0.1',
-            'port' => 6379
+            'port' => 6380
         ]
     ];
 
@@ -37,14 +36,14 @@ class Redis {
         $this->_redis->connect($this->options['server']['host'], $this->options['server']['port']);
     }
 
-    public function get($name) {
+    public function get($key) {
         if (!$this->_redis) {
             $this->_connect();
         }
-        return $this->_redis->get($this->options['prefix'] . $name);
+        return $this->_redis->get($key);
     }
 
-    public function set($name, $value, $expire = NULL) {
+    public function set($key, $value, $expire = NULL) {
         if ($this->_redis) {
             $this->_connect();
         }
@@ -52,17 +51,17 @@ class Redis {
             $expire = $this->options['expire'];
         }
         if (intval($expire) === 0) {
-            return $this->_redis->set($this->options['prefix'] . $name, $value);
+            return $this->_redis->set($key, $value);
         } else {
-            return $this->_redis->setEx($this->options['prefix'] . $name, intval($expire), $value);
+            return $this->_redis->setEx($key, intval($expire), $value);
         }
     }
 
-    public function rm($name, $ttl = 0) {
+    public function rm($key, $ttl = 0) {
         if (!$this->_redis) {
             $this->_connect();
         }
-        return $this->_redis->delete($this->options['prefix'] . $name);
+        return $this->_redis->delete($key);
     }
 
     public function clear() {
