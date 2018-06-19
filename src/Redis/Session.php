@@ -38,7 +38,7 @@ class Session {
             if ($this->_redis->expireAt($key, time() + $ttl)) {
                 return $sessionId;
             }
-            $this->_redis->rm($key);
+            $this->_redis->del($key);
         }
         return '';
     }

@@ -12,12 +12,10 @@ namespace Onefox\Lib\Redis;
 class Redis {
 
     private $_redis;
-    private $options = [
-        'expire' => 0,
-        'server' => [
-            'host' => '127.0.0.1',
-            'port' => 6379
-        ]
+    private $_options = [
+        'host' => '127.0.0.1',
+        'port' => 6379,
+        'ctimeout' => 1000,//超时时间单位ms
     ];
 
     public function __construct($conf = []) {
@@ -27,58 +25,20 @@ class Redis {
         if (!is_array($conf)) {
             throw new \RuntimeException('The config parameter must be array.');
         }
-        $conf && $this->options = array_merge($this->options, $conf);
+        $conf && $this->_options = array_merge($this->_options, $conf);
         $this->_connect();
     }
 
     private function _connect() {
         $this->_redis = new \Redis();
-        $this->_redis->connect($this->options['server']['host'], $this->options['server']['port']);
-    }
-
-    public function get($key) {
-        if (!$this->_redis) {
-            $this->_connect();
-        }
-        return $this->_redis->get($key);
-    }
-
-    public function set($key, $value, $expire = NULL) {
-        if ($this->_redis) {
-            $this->_connect();
-        }
-        if (is_null($expire)) {
-            $expire = $this->options['expire'];
-        }
-        if (intval($expire) === 0) {
-            return $this->_redis->set($key, $value);
-        } else {
-            return $this->_redis->setEx($key, intval($expire), $value);
-        }
-    }
-
-    public function rm($key, $ttl = 0) {
-        if (!$this->_redis) {
-            $this->_connect();
-        }
-        return $this->_redis->delete($key);
-    }
-
-    public function clear() {
-        if (!$this->_redis) {
-            $this->_connect();
-        }
-        return $this->_redis->flushAll();
+        $this->_redis->connect($this->_options['host'], $this->_options['port'], $this->_options['ctimeout'] / 1000);
     }
 
     public function __call($funcName, $arguments) {
         if (!$this->_redis) {
             $this->_connect();
         }
-        $res = call_user_func_array([
-            $this->_redis,
-            $funcName
-        ], $arguments);
+        $res = call_user_func_array([$this->_redis, $funcName], $arguments);
         return $res;
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author ryan<zer0131@vip.qq.com>
- * @desc 
+ * @desc
  * 基于redis锁实现
  * redis扩展使用：phpredis<https://github.com/phpredis/phpredis>
  */
@@ -18,30 +18,36 @@ class Lock {
         $this->_redis = new Redis();
     }
 
-    public function acquire($lockName, $acquireTime = 10, $lockTimeout = 10) {
-        $value = uniqid();
-        $key = self::LOCK_PREFIX . $lockName;
-        $lockTimeout = intval($lockTimeout);
-        $end = time() + $acquireTime;
-        while (time() < $end) {
-            if ($this->_redis->setnx($key, $value)) {
-                $this->_redis->expire($key, $lockTimeout);
-                return $value;
-            } elseif (!$this->_redis->ttl($key)) {
-                $this->_redis->expire($key, $lockTimeout);
+    /**
+     * 创建锁
+     * @param string $key 避免与其他类型锁重复,防止冲突
+     * @param int $lockTime 锁时效时长
+     * @param string $randomValue 为了防止锁中代码执行时间过长,直到锁过期。误删下一个锁的key
+     * @return bool
+     */
+    public function create($key, $lockTime = 3, $randomValue = '1') {
+        $retSet = $this->_redis->set(self::LOCK_PREFIX . $key, $randomValue, ['nx', 'ex' => $lockTime]);
+        if (!$retSet) {//存在返回 NULL
+            if ($this->_redis->ttl($key) == -1) {
+                $this->_redis->expire($key, $lockTime);
             }
-            usleep(1000);
+            return false;
         }
-        return false;
+        $this->_redis->expire($key, $lockTime);
+        return true;
     }
 
-    public function release($lockName, $value) {
-        $key = self::LOCK_PREFIX . $lockName;
-        if ($this->_redis->get($key) == $value) {
-            $this->_redis->del($key);
-            return true;
+    /**
+     * 释放锁
+     * @param string $key key
+     * @param string $randomValue 与create的传值一致,否则删失败。
+     * @return bool
+     */
+    public function release($key, $randomValue = '1') {
+        if ($this->_redis->get(self::LOCK_PREFIX . $key) == $randomValue) {
+            return $this->_redis->del($key);
         }
-        return false;
+        return true;
     }
 
 }
