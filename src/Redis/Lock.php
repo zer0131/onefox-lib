@@ -6,9 +6,7 @@
  * redis扩展使用：phpredis<https://github.com/phpredis/phpredis>
  */
 
-namespace foxone\redis;
-
-use foxone\redis\Redis;
+namespace Onefox\Lib\Redis;
 
 class Lock {
 

@@ -5,7 +5,7 @@
  * @desc curl请求封装
  */
 
-namespace foxone\http;
+namespace Onefox\Lib\Http;
 
 class Curl {
 

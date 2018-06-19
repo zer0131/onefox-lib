@@ -14,7 +14,7 @@
  *
  */
 
-namespace foxone\encrypt;
+namespace Onefox\Lib\Encrypt;
 
 class RsaEncryption {
     private $publicKeyRes;//公钥

@@ -64,7 +64,7 @@
  *
  */
 
-namespace foxone\encrypt;
+namespace Onefox\Lib\Encrypt;
 
 class AesEncryption {
 

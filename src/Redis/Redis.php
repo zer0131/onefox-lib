@@ -7,7 +7,7 @@
  * 基于phpredis<https://github.com/phpredis/phpredis>
  */
 
-namespace foxone\redis;
+namespace Onefox\Lib\Redis;
 
 class Redis {
 
