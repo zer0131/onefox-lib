@@ -7,9 +7,7 @@
  * 可用于客户端会话维护,sessionid可以作为token使用
  */
 
-namespace foxone\redis;
-
-use foxone\redis\Redis;
+namespace Onefox\Lib\Redis;
 
 class Session {
 

@@ -1,0 +1,29 @@
+{
+    "name":"onefox/lib",
+    "description":"onefox framework library",
+    "keywords": ["OneFox", "framework", "php", "lib"],
+    "type":"project",
+    "homepage":"https://github.com/zer0131/onefox-lib",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "ryan",
+            "email": "zer0131@vip.qq.com",
+            "homepage": "http://www.zhangenrui.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Onefox\\Lib\\": "src/"
+        }
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}

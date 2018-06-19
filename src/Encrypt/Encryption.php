@@ -5,7 +5,7 @@
  * @desc 加解密类
  */
 
-namespace foxone\encrypt;
+namespace Onefox\Lib\Encrypt;
 
 class Encryption {
 
