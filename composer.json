@@ -2,7 +2,7 @@
     "name":"onefox/lib",
     "description":"onefox framework library",
     "keywords": ["OneFox", "framework", "php", "lib"],
-    "type":"project",
+    "type":"library",
     "homepage":"https://github.com/zer0131/onefox-lib",
     "license": "Apache-2.0",
     "authors": [
